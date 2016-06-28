@@ -1,8 +1,11 @@
+var obj,
+    path = [];
+
 document.addEventListener("DOMContentLoaded", function() {
-    window.obj = getJSON('http://localhost:5000/tree');
-    initMainFolder(window.obj);
-    initRightSide(window.obj);
-    console.log(window.obj);
+    obj = getJSON('http://localhost:5000/tree');
+    initMainFolder(obj);
+    initRightSide(obj);
+    console.log(obj);
 });
 
 function getJSON(url) {
@@ -29,10 +32,13 @@ function initRightSide(json){
 
     var trMain = document.createElement('tr');
     trMain.dataset.name = json.name;
-    trMain.innerHTML = '<td>..</td><td></td><td></td>';
-    trMain.className = 'folder';
-    trMain.ondblclick = openFolder;
-    tbody.appendChild(trMain);
+    console.log(path);
+    if (path.length != 1){
+        trMain.innerHTML = '<td>..</td><td></td><td></td>';
+        trMain.className = 'folder';
+        trMain.ondblclick = openFolderUp;
+        tbody.appendChild(trMain);
+    }
 
     if (json.children.length > 0){
         for (var i = 0; i < json.children.length; i++){
@@ -67,6 +73,8 @@ function initMainFolder(json){
     liMain.innerHTML = json.name;
     liMain.className = 'item';
     main.dataset.name = json.name;
+    path.push(json.name);
+    setBreadcrumbs();
 
     if (json.children.length > 0) {
         var list = document.createElement('ul');
@@ -133,27 +141,69 @@ function showOrHideFolder(event){
 
     }
     var parent = this.getElementsByTagName('ul')[0].dataset.name;
-    searchItem(window.obj, parent);
+    searchItem(obj, parent);
     event.stopPropagation();
 }
 
 function openFolder(){
-    var parent = this.dataset.name;
-    searchItem(window.obj, parent);
+    var current = this.dataset.name;
+    searchItem(obj, current);
+}
+
+function openFolderUp(){
+    var bc = document.getElementsByClassName('breadcrumb')[0].getElementsByClassName('active')[0];
+    var parent = bc.previousSibling.getElementsByTagName('a')[0].innerHTML;
+    path.splice(path.length-1, 1);
+    setBreadcrumbs();
+    searchItem(obj, parent);
 }
 
 function searchItem(json, parent){
-    json.children.forEach(function(value, index){
-        if (value.name == parent){
-            initRightSide(value);
-        } else if (typeof value.children != 'undefined'){
-            searchItem(value, parent);
+    if (json.name == parent) {
+        if (path.indexOf(json.name) == -1) {
+            path.push(json.name);
+            setBreadcrumbs();
         }
-    });
+        initRightSide(json);
+    } else {
+        json.children.forEach(function(value, index){
+            if (value.name == parent){
+                if (path.indexOf(value.name) == -1) {
+                    path.push(value.name);
+                    setBreadcrumbs();
+                }
+                initRightSide(value);
+            } else if (typeof value.children != 'undefined'){
+                if (path.indexOf(value.name) == -1) {
+                    path.push(value.name);
+                    setBreadcrumbs();
+                }
+                searchItem(value, parent);
+            }
+        });
+    }
 }
 
 function convertDate(input) {
     function pad(s) { return (s < 10) ? '0' + s : s; }
     var d = new Date(input);
     return [pad(d.getDate()), pad(d.getMonth()+1), d.getFullYear()].join('.') + ' ' + [pad(d.getHours()), pad(d.getMinutes())].join(':');
+}
+
+function setBreadcrumbs(){
+    var ol = document.getElementsByClassName('breadcrumb')[0];
+    ol.innerHTML = '';
+    path.forEach(function(val, index) {
+        var li = document.createElement('li');
+        if (index == path.length-1) {
+            li.innerHTML = val;
+            li.className = 'active';
+        } else {
+            var a = document.createElement('a');
+            a.innerHTML = val;
+            a.href = '';
+            li.appendChild(a);
+        }
+        ol.appendChild(li);
+    });
 }

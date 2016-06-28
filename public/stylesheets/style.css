@@ -22,9 +22,19 @@ h3{
 	text-align: center;
 	padding: 5px;
 }
-#breadCrumbs{
-	height: 25px;
+.breadcrumb{
+	background-color: transparent;
 }
+/*.breadcrumb li {
+	color: #337ab7;
+}
+.breadcrumb li:hover{
+	color: #23527c;
+	text-decoration: underline;
+}*/
+/*#breadCrumbs{
+	height: 25px;
+}*/
 #tree{
 	border: 1px solid black;
 	width: 25%;
