@@ -1,0 +1,126 @@
+header{
+	height: 75px;
+	background-color:#4141b3;
+	border: 2px solid black;
+}
+header input{
+	width: 75%;
+	padding-left: 20px;
+	margin-left: 15px;
+	border: 1px solid black;
+
+}
+header img{
+	display: inline-block;
+	width: 25px;
+	height: 25px;
+	padding-left: 15px;
+}
+h3{
+	margin: 0;
+	color :#e0f5f9;
+	text-align: center;
+	padding: 5px;
+}
+#breadCrumbs{
+	height: 25px;
+}
+#tree{
+	border: 1px solid black;
+	width: 25%;
+	height: 480px;
+	display: inline-block;
+	box-sizing:border-box;
+	float: left;
+}
+#tree ul{
+	list-style: none;
+	padding-left: 25px
+}
+#tree ul li{
+	margin: 5px 0;
+	cursor: pointer;
+	position: relative;
+}
+#tree ul li.hasChild ul{
+	display: none;
+}
+#tree ul li.hasChild.open > ul{
+	display: block;
+}
+#tree ul li::before{
+	display: inline-block;
+	position: absolute;
+	height: 16px;
+	width: 16px;
+	left: -18px;
+	line-height: 13px;
+	background-repeat: no-repeat;
+	background-size: 16px 16px;
+}
+#tree ul li.hasChild::before{
+	top: 0;
+	content: "+";
+    padding-left: 2px;
+    border: 1px solid grey;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+#tree ul li.hasChild.open::before{
+	content: "--";
+}
+#tree ul li.file::before{
+	content: '';
+}
+#tree ul li.img::before{
+	background-image: url('../images/image.png');
+}
+#tree ul li.txt::before{
+	background-image: url('../images/text.png');
+}
+#tree ul li.video::before{
+	background-image: url('../images/video.png');
+}
+#tree ul li.audio::before{
+	background-image: url('../images/audio.png');
+}
+#content{
+	width: 75%;
+	height: 480px;
+	border: 1px solid black;
+	box-sizing:border-box;
+	display: inline-block;
+
+
+}
+#content tr{
+	cursor: pointer;
+}
+#content td{
+	position: relative;
+}
+#content td.folder:before{
+	content: '';
+	background-image: url('../images/folder.png');
+	position: absolute;
+	top: 0;
+	left: -10px;
+	width: 15px;
+	height: 15px;
+	display: inline-block;
+}
+img{
+	width: 15px;
+	height: 15px;
+	float: left;
+	display: inline-block;
+
+}
+footer{
+	height: 35px;
+	background-color:#4141b3;
+	border: 1px solid black;
+	box-sizing:border-box;
+
+}
